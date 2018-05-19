@@ -1,0 +1,114 @@
+﻿@model IEnumerable<SimpleBlog.Models.BlogPost>
+    @{
+        ViewBag.Title = "All Post";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h4 class="panel-title">All Posts</h4>
+    </div>
+
+    <div class="panel-body">
+        <div id="updateArea">
+            <div class="row">
+                <div id="loadingImage" style="display: none" class="overlay">
+                    <div style="height: 100%; width: 100%; padding-left: 45%; padding-top: 20%;">
+                        <img src="/Content/Admin/assets/images/Init_loading.gif" height="100" width="100" alt="Loading, please wait" />
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    @{
+                        string successMsg = TempData["SuccessMsg"] as string;
+                        string errorMsg = TempData["ErrorMsg"] as string;
+                        if (!string.IsNullOrEmpty(successMsg))
+                        {
+                            <div class="alert alert-success fade in">
+                                <strong>Success!</strong>
+                                @successMsg
+                                <span class="close" data-dismiss="alert">×</span>
+                            </div>
+                        }
+                        if (!string.IsNullOrEmpty(errorMsg))
+                        {
+                            <div class="alert alert-danger fade in">
+                                <strong>Error!</strong>
+                                @Html.Raw(HttpUtility.HtmlDecode(errorMsg))
+                                <span class="close" data-dismiss="alert">×</span>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="col-md-12">
+                    <table class="table table-bordered dataTable">
+                        <thead>
+                            <tr>
+                                <th style="font-weight: bold">#</th>
+                                <th style="font-weight: bold">Title</th>
+                                <th style="font-weight: bold">Author</th>
+                                <th style="font-weight: bold">Category</th>
+                                <th style="font-weight: bold">Tags</th>
+                                <th style="font-weight: bold">Date</th>
+                                <th style="font-weight: bold">Status</th>
+                                <th style="font-weight: bold">Actions</th>
+                                @if (Roles.IsUserInRole("Developer"))
+    {
+                            <th style="font-weight: bold">Actions</th>
+}
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @{
+                            int counter = 1;
+                        }
+                        @foreach (var data in Model)
+                        {
+                            <tr>
+                                <td>@(counter++)</td>
+                                <td><a href="@Url.Action("Details", "Home", new {id = @data.Id})" target="_blank">@data.PostTitle</a></td>
+                                <td><a href="@data.UserProfile.FullName">@data.UserProfile.webpages_Roles.FirstOrDefault().RoleName.ToLower()</a></td>
+                                <td>@data.BlogPostsPostCategories.Select(x => x.BlogPostCategory.CategoryName).Aggregate((i, j) => i + "," + j)</td>
+                                <td>@data.BlogPostsPostTags.Select(x => x.BlogPostTag.TagName).Aggregate((i, j) => i + "," + j)</td>
+                                <td>@((data.IsDrafted && !data.IsPublished) ? "Drafted" : "Published") <br /> @data.CreatedDate.Value.ToString("dd/MM/yyyy")</td>
+                                <td>@((data.IsApproved && data.IsPublished)? "Approved":"Pending")</td>
+                                <td>
+                                    @using (Html.BeginForm("Remove", "Blog", new { id = @data.Id }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <a class="btn btn-info btn-xs" href="@Url.Action("Details", "Home", new {Area="",id = @data.Id})" target="_blank"><i class="fa fa-eye-slash"></i></a>
+                                        <a class="btn btn-warning btn-xs" href="@Url.Action("Edit", "Blog", new {id = @data.Id})"><i class="fa fa-edit"></i></a>
+                                        <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
+                                    }
+                                </td>
+                                @if (Roles.IsUserInRole("Developer"))
+                                {
+                                    <td>
+                                        @using (Html.BeginForm("ApproveOrReject", "Blog", new { id = @data.Id }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            
+                                            <input type="submit" class="btn btn-primary btn-xs" name="type" value="Approve"/>
+                                            <input type="submit" class="btn btn-primary btn-xs" name="type" value="Reject"/>
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+
+    <script type="text/javascript">
+        $(document)
+            .ready(function () {
+
+                $('#Blog').addClass("active");
+                $('#All_Post').addClass("active");
+            });
+    </script>
+}

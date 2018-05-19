@@ -1,0 +1,31 @@
+﻿<ul class="sidebar-menu" data-widget="tree">
+    <li class="header">MAIN NAVIGATION</li>
+    <li class="active">
+        <a href="@Url.Action("Index","Dashboard")">
+            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+        </a>
+    </li>
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-clipboard"></i>
+            <span>Post</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="@Url.Action("Create","Blog")"><i class="fa fa-circle-o"></i> Add New</a></li>
+            <li><a href="@Url.Action("Index","Blog")"><i class="fa fa-circle-o"></i> All Post</a></li>
+        </ul>
+    </li>
+    <li class="" id="Category">
+        <a href="@Url.Action("Index","BlogPostCategories")">
+            <i class="fa fa-th-list"></i> <span>Category</span>
+        </a>
+    </li>
+    <li class="" id="Tags">
+        <a href="@Url.Action("Index","tag")">
+            <i class="fa fa-tags"></i> <span>Tags</span>
+        </a>
+    </li>
+</ul>

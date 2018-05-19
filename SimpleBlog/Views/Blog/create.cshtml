@@ -1,0 +1,173 @@
+﻿@model SimpleBlog.Models.ViewModels.BlogPostVm
+@{
+    ViewBag.Title = "Create Post";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/Admin/assets/plugins/bootstrap-tag-input/bootstrap-tagsinput.css" rel="stylesheet" />
+
+<h1 class="page-header">Add New Post </h1>
+<div class="row">
+    <div class="col-md-12">
+        @{
+            string successMsg = TempData["SuccessMsg"] as string;
+            string errorMsg = TempData["ErrorMsg"] as string;
+            if (!string.IsNullOrEmpty(successMsg))
+            {
+                <div class="alert alert-success fade in">
+                    <strong>Success!</strong>
+                    @successMsg
+                    <span class="close" data-dismiss="alert">×</span>
+                </div>
+            }
+            if (!string.IsNullOrEmpty(errorMsg))
+            {
+                <div class="alert alert-danger fade in">
+                    <strong>Error!</strong>
+                    @Html.Raw(HttpUtility.HtmlDecode(errorMsg))
+                    <span class="close" data-dismiss="alert">×</span>
+                </div>
+            }
+        }
+    </div>
+</div>
+@using (Html.BeginForm("create", "blog", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <script src="/Content/Admin/assets/bower_components/ckeditor/ckeditor.js"></script>
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-md-9">
+            <div class="col-md-12" style="padding:0px !important">
+                <div class="form-group">
+                    <div>
+                        @Html.TextBoxFor(x => x.PostTitle, new { @class = "form-control", @placeholder = "Enter title here" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" style="padding: 0px !important">
+                <div class="form-group">
+                    <div>
+                        @Html.TextAreaFor(x => x.PostContent, new { @class = "ckeditor", @id = "editor1", @name = "editor1", @rows = "20" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" style="padding: 0px !important;">
+                <div class="panel panel-default" style="">
+                    <div class="panel-heading">
+                        
+                        <h4 class="panel-title"><b>Excerpt</b></h4>
+                    </div>
+                    <div class="panel-body" style="display: block;">
+                        <div class="col-md-12 no-padding no-margin" style="padding: 0px !important">
+                            @Html.TextBoxFor(x => x.ExcerptText, new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-12" style="padding: 0px !important;padding-top: 15px !important;">
+                            Excerpts are optional hand-crafted summaries of your content that can be used in your theme
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" style="padding: 0px !important;">
+                <div class="panel panel-default" style="">
+                    <div class="panel-heading">
+                       
+                        <h4 class="panel-title"><b>Youtube Video Codec</b></h4>
+                    </div>
+                    <div class="panel-body" style="display: block;">
+                        <div class="col-md-12 no-padding no-margin" style="padding: 0px !important">
+                            @Html.TextBoxFor(x => x.YoutudeUrlCodec, new { @class = "form-control", @placeholder = "e8eSfqaaGXQ" })
+                        </div>
+                        <div class="col-md-12" style="padding: 0px !important; padding-top: 15px !important;">
+                            <text>
+                                Input Your Youtube Videos Id Example : https://www.youtube.com/watch?v=<b>e8eSfqaaGXQ</b>
+                            </text>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3" style="margin:0px !important">
+            <div class="panel panel-default" style="">
+                <div class="panel-heading">
+                    
+                    <h4 class="panel-title"><b>Publish</b></h4>
+                </div>
+                <div class="panel-body" style="display: block;">
+                    <div class="col-md-12 no-padding no-margin" style="padding: 0px !important">
+                        <input type="submit" value="Save Draft" name="submit" class="btn btn-white btn-sm" />
+                    </div>
+                </div>
+                <div class="panel-footer text-right">
+                    <input type="submit" value="Publish" name="submit" class="btn btn-sm btn-primary" />
+                </div>
+            </div>
+            <div class="panel panel-default" style="">
+                <div class="panel-heading">
+                    
+                    <h4 class="panel-title"><b>Format</b></h4>
+                </div>
+                <div class="panel-body" style="display: block;">
+                    <div class="col-md-12 no-padding no-margin" style="padding: 0px !important">
+                        <label class="radio-inline">@Html.RadioButtonFor(x => x.PostFormat, "1") Standared</label>
+                        <br />
+                        <label class="radio-inline"> @Html.RadioButtonFor(x => x.PostFormat, "2") Videos</label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="panel panel-default" style="">
+                <div class="panel-heading">
+                    
+                    <h4 class="panel-title"><b>Categories</b></h4>
+                </div>
+                <div class="panel-body" style="display: block;">
+                    <div class="col-md-12 no-padding no-margin" style="padding: 0px !important">
+                        @Html.Partial("_categories_partial", Model)
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default" style="">
+                <div class="panel-heading">
+                    
+                    <h4 class="panel-title"><b>Tags</b></h4>
+                </div>
+                <div class="panel-body" style="display: block;">
+                    <div class="col-md-12 no-padding no-margin" style="padding: 0px !important">
+                        <div class="form-group">
+                            @Html.TextBoxFor(x => x.TagText, new { @class = "form-control", @size = "1", data_role = "tagsinput", @id = "tagTextInput", @value = "" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default" style="">
+                <div class="panel-heading">
+                    
+                    <h4 class="panel-title"><b>Featured Images</b></h4>
+                </div>
+                <div class="panel-body" style="display: block;">
+                    <div class="col-md-12 no-padding no-margin" style="padding: 0px !important">
+                        <div class="form-group">
+                            <input type="file" name="file" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts
+{
+    <script src="~/Content/Admin/assets/plugins/bootstrap-tag-input/bootstrap-tagsinput.js"></script>
+
+    @*<script src="~/Content/Admin/Scripts/app/blog.js"></script>*@
+
+    <script type="text/javascript">
+        $(document)
+            .ready(function () {
+
+                $('#Blog').addClass("active");
+                $('#New_Post').addClass("active");
+            });
+    </script>
+
+}

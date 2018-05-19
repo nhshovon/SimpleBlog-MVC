@@ -1,0 +1,616 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BlogPostCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="BlogPosts">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PostTitle" Type="nvarchar(max)" />
+          <Property Name="PostContent" Type="nvarchar(max)" />
+          <Property Name="IsDrafted" Type="bit" Nullable="false" />
+          <Property Name="IsPublished" Type="bit" Nullable="false" />
+          <Property Name="IsApproved" Type="bit" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="UpdatedDate" Type="datetime" />
+          <Property Name="UpdatedBy" Type="int" />
+          <Property Name="BlogPostsImageUrl" Type="nvarchar(max)" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+          <Property Name="ExcerptText" Type="nvarchar(max)" />
+          <Property Name="YoutubeVedioCodec" Type="nvarchar(max)" />
+          <Property Name="PostFormat" Type="int" />
+        </EntityType>
+        <EntityType Name="BlogPostsPostCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PostId" Type="int" />
+          <Property Name="CategoryId" Type="int" />
+        </EntityType>
+        <EntityType Name="BlogPostsPostTags">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PostId" Type="int" />
+          <Property Name="TagId" Type="int" />
+        </EntityType>
+        <EntityType Name="BlogPostTag">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TagName" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="UserProfile">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="56" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="100" />
+          <Property Name="Gender" Type="nvarchar" MaxLength="15" />
+          <Property Name="ProfileImageUrl" Type="nvarchar" MaxLength="200" />
+          <Property Name="DateOfBirth" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="webpages_Membership">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="ConfirmationToken" Type="nvarchar" MaxLength="128" />
+          <Property Name="IsConfirmed" Type="bit" />
+          <Property Name="LastPasswordFailureDate" Type="datetime" />
+          <Property Name="PasswordFailuresSinceLastSuccess" Type="int" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="PasswordChangedDate" Type="datetime" />
+          <Property Name="PasswordSalt" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="PasswordVerificationToken" Type="nvarchar" MaxLength="128" />
+          <Property Name="PasswordVerificationTokenExpirationDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="webpages_OAuthMembership">
+          <Key>
+            <PropertyRef Name="Provider" />
+            <PropertyRef Name="ProviderUserId" />
+          </Key>
+          <Property Name="Provider" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="ProviderUserId" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="webpages_Roles">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="webpages_UsersInRoles">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="RoleId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__BlogPosts__Categ__59FA5E80">
+          <End Role="BlogPostCategory" Type="Self.BlogPostCategory" Multiplicity="0..1" />
+          <End Role="BlogPostsPostCategory" Type="Self.BlogPostsPostCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BlogPostCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BlogPostsPostCategory">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__BlogPosts__Creat__08BA1173">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="0..1" />
+          <End Role="BlogPosts" Type="Self.BlogPosts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="BlogPosts">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__BlogPosts__PostI__0C8AA257">
+          <End Role="BlogPosts" Type="Self.BlogPosts" Multiplicity="0..1" />
+          <End Role="BlogPostsPostTags" Type="Self.BlogPostsPostTags" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BlogPosts">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BlogPostsPostTags">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__BlogPosts__PostI__105B333B">
+          <End Role="BlogPosts" Type="Self.BlogPosts" Multiplicity="0..1" />
+          <End Role="BlogPostsPostCategory" Type="Self.BlogPostsPostCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BlogPosts">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BlogPostsPostCategory">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__BlogPosts__TagId__5EBF139D">
+          <End Role="BlogPostTag" Type="Self.BlogPostTag" Multiplicity="0..1" />
+          <End Role="BlogPostsPostTags" Type="Self.BlogPostsPostTags" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BlogPostTag">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BlogPostsPostTags">
+              <PropertyRef Name="TagId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__BlogPosts__Updat__09AE35AC">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="0..1" />
+          <End Role="BlogPosts" Type="Self.BlogPosts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="BlogPosts">
+              <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_RoleId">
+          <End Role="webpages_Roles" Type="Self.webpages_Roles" Multiplicity="1" />
+          <End Role="webpages_UsersInRoles" Type="Self.webpages_UsersInRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="webpages_Roles">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="webpages_UsersInRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_UserId">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="webpages_UsersInRoles" Type="Self.webpages_UsersInRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="webpages_UsersInRoles">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ModelsStoreContainer">
+          <EntitySet Name="BlogPostCategory" EntityType="Self.BlogPostCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BlogPosts" EntityType="Self.BlogPosts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BlogPostsPostCategory" EntityType="Self.BlogPostsPostCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BlogPostsPostTags" EntityType="Self.BlogPostsPostTags" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BlogPostTag" EntityType="Self.BlogPostTag" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserProfile" EntityType="Self.UserProfile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="webpages_Membership" EntityType="Self.webpages_Membership" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="webpages_OAuthMembership" EntityType="Self.webpages_OAuthMembership" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="webpages_Roles" EntityType="Self.webpages_Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="webpages_UsersInRoles" EntityType="Self.webpages_UsersInRoles" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__BlogPosts__Categ__59FA5E80" Association="Self.FK__BlogPosts__Categ__59FA5E80">
+            <End Role="BlogPostCategory" EntitySet="BlogPostCategory" />
+            <End Role="BlogPostsPostCategory" EntitySet="BlogPostsPostCategory" />
+          </AssociationSet>
+          <AssociationSet Name="FK__BlogPosts__Creat__08BA1173" Association="Self.FK__BlogPosts__Creat__08BA1173">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="BlogPosts" EntitySet="BlogPosts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__BlogPosts__PostI__0C8AA257" Association="Self.FK__BlogPosts__PostI__0C8AA257">
+            <End Role="BlogPosts" EntitySet="BlogPosts" />
+            <End Role="BlogPostsPostTags" EntitySet="BlogPostsPostTags" />
+          </AssociationSet>
+          <AssociationSet Name="FK__BlogPosts__PostI__105B333B" Association="Self.FK__BlogPosts__PostI__105B333B">
+            <End Role="BlogPosts" EntitySet="BlogPosts" />
+            <End Role="BlogPostsPostCategory" EntitySet="BlogPostsPostCategory" />
+          </AssociationSet>
+          <AssociationSet Name="FK__BlogPosts__TagId__5EBF139D" Association="Self.FK__BlogPosts__TagId__5EBF139D">
+            <End Role="BlogPostTag" EntitySet="BlogPostTag" />
+            <End Role="BlogPostsPostTags" EntitySet="BlogPostsPostTags" />
+          </AssociationSet>
+          <AssociationSet Name="FK__BlogPosts__Updat__09AE35AC" Association="Self.FK__BlogPosts__Updat__09AE35AC">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="BlogPosts" EntitySet="BlogPosts" />
+          </AssociationSet>
+          <AssociationSet Name="fk_RoleId" Association="Self.fk_RoleId">
+            <End Role="webpages_Roles" EntitySet="webpages_Roles" />
+            <End Role="webpages_UsersInRoles" EntitySet="webpages_UsersInRoles" />
+          </AssociationSet>
+          <AssociationSet Name="fk_UserId" Association="Self.fk_UserId">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="webpages_UsersInRoles" EntitySet="webpages_UsersInRoles" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="Blog_Db_Entities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="BlogPostCategories" EntityType="Models.BlogPostCategory" />
+          <EntitySet Name="BlogPosts" EntityType="Models.BlogPost" />
+          <EntitySet Name="BlogPostsPostCategories" EntityType="Models.BlogPostsPostCategory" />
+          <EntitySet Name="BlogPostsPostTags" EntityType="Models.BlogPostsPostTag" />
+          <EntitySet Name="BlogPostTags" EntityType="Models.BlogPostTag" />
+          <EntitySet Name="webpages_Membership" EntityType="Models.webpages_Membership" />
+          <EntitySet Name="webpages_OAuthMembership" EntityType="Models.webpages_OAuthMembership" />
+          <EntitySet Name="webpages_Roles" EntityType="Models.webpages_Roles" />
+          <AssociationSet Name="FK__BlogPosts__Categ__59FA5E80" Association="Models.FK__BlogPosts__Categ__59FA5E80">
+            <End Role="BlogPostCategory" EntitySet="BlogPostCategories" />
+            <End Role="BlogPostsPostCategory" EntitySet="BlogPostsPostCategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK__BlogPosts__PostI__0C8AA257" Association="Models.FK__BlogPosts__PostI__0C8AA257">
+            <End Role="BlogPost" EntitySet="BlogPosts" />
+            <End Role="BlogPostsPostTag" EntitySet="BlogPostsPostTags" />
+          </AssociationSet>
+          <AssociationSet Name="FK__BlogPosts__PostI__105B333B" Association="Models.FK__BlogPosts__PostI__105B333B">
+            <End Role="BlogPost" EntitySet="BlogPosts" />
+            <End Role="BlogPostsPostCategory" EntitySet="BlogPostsPostCategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK__BlogPosts__TagId__5EBF139D" Association="Models.FK__BlogPosts__TagId__5EBF139D">
+            <End Role="BlogPostTag" EntitySet="BlogPostTags" />
+            <End Role="BlogPostsPostTag" EntitySet="BlogPostsPostTags" />
+          </AssociationSet>
+          <EntitySet Name="UserProfiles" EntityType="Models.UserProfile" />
+          <AssociationSet Name="FK__BlogPosts__Creat__08BA1173" Association="Models.FK__BlogPosts__Creat__08BA1173">
+            <End Role="UserProfile" EntitySet="UserProfiles" />
+            <End Role="BlogPost" EntitySet="BlogPosts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__BlogPosts__Updat__09AE35AC" Association="Models.FK__BlogPosts__Updat__09AE35AC">
+            <End Role="UserProfile" EntitySet="UserProfiles" />
+            <End Role="BlogPost" EntitySet="BlogPosts" />
+          </AssociationSet>
+          <AssociationSet Name="webpages_UsersInRoles" Association="Models.webpages_UsersInRoles">
+            <End Role="webpages_Roles" EntitySet="webpages_Roles" />
+            <End Role="UserProfile" EntitySet="UserProfiles" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="BlogPostCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="BlogPostsPostCategories" Relationship="Models.FK__BlogPosts__Categ__59FA5E80" FromRole="BlogPostCategory" ToRole="BlogPostsPostCategory" />
+        </EntityType>
+        <EntityType Name="BlogPost">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PostTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PostContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsDrafted" Type="Boolean" Nullable="false" />
+          <Property Name="IsPublished" Type="Boolean" Nullable="false" />
+          <Property Name="IsApproved" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <Property Name="BlogPostsImageUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="ExcerptText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="YoutubeVedioCodec" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PostFormat" Type="Int32" />
+          <NavigationProperty Name="BlogPostsPostTags" Relationship="Models.FK__BlogPosts__PostI__0C8AA257" FromRole="BlogPost" ToRole="BlogPostsPostTag" />
+          <NavigationProperty Name="BlogPostsPostCategories" Relationship="Models.FK__BlogPosts__PostI__105B333B" FromRole="BlogPost" ToRole="BlogPostsPostCategory" />
+          <NavigationProperty Name="UserProfile" Relationship="Models.FK__BlogPosts__Creat__08BA1173" FromRole="BlogPost" ToRole="UserProfile" />
+          <NavigationProperty Name="UserProfile1" Relationship="Models.FK__BlogPosts__Updat__09AE35AC" FromRole="BlogPost" ToRole="UserProfile" />
+        </EntityType>
+        <EntityType Name="BlogPostsPostCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PostId" Type="Int32" />
+          <Property Name="CategoryId" Type="Int32" />
+          <NavigationProperty Name="BlogPostCategory" Relationship="Models.FK__BlogPosts__Categ__59FA5E80" FromRole="BlogPostsPostCategory" ToRole="BlogPostCategory" />
+          <NavigationProperty Name="BlogPost" Relationship="Models.FK__BlogPosts__PostI__105B333B" FromRole="BlogPostsPostCategory" ToRole="BlogPost" />
+        </EntityType>
+        <EntityType Name="BlogPostsPostTag">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PostId" Type="Int32" />
+          <Property Name="TagId" Type="Int32" />
+          <NavigationProperty Name="BlogPost" Relationship="Models.FK__BlogPosts__PostI__0C8AA257" FromRole="BlogPostsPostTag" ToRole="BlogPost" />
+          <NavigationProperty Name="BlogPostTag" Relationship="Models.FK__BlogPosts__TagId__5EBF139D" FromRole="BlogPostsPostTag" ToRole="BlogPostTag" />
+        </EntityType>
+        <EntityType Name="BlogPostTag">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TagName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="BlogPostsPostTags" Relationship="Models.FK__BlogPosts__TagId__5EBF139D" FromRole="BlogPostTag" ToRole="BlogPostsPostTag" />
+        </EntityType>
+        <EntityType Name="webpages_Membership">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="ConfirmationToken" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="IsConfirmed" Type="Boolean" />
+          <Property Name="LastPasswordFailureDate" Type="DateTime" Precision="3" />
+          <Property Name="PasswordFailuresSinceLastSuccess" Type="Int32" Nullable="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="PasswordChangedDate" Type="DateTime" Precision="3" />
+          <Property Name="PasswordSalt" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="PasswordVerificationToken" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="PasswordVerificationTokenExpirationDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="webpages_OAuthMembership">
+          <Key>
+            <PropertyRef Name="Provider" />
+            <PropertyRef Name="ProviderUserId" />
+          </Key>
+          <Property Name="Provider" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderUserId" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="webpages_Roles">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserProfiles" Relationship="Models.webpages_UsersInRoles" FromRole="webpages_Roles" ToRole="UserProfile" />
+        </EntityType>
+        <Association Name="FK__BlogPosts__Categ__59FA5E80">
+          <End Type="Models.BlogPostCategory" Role="BlogPostCategory" Multiplicity="0..1" />
+          <End Type="Models.BlogPostsPostCategory" Role="BlogPostsPostCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BlogPostCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BlogPostsPostCategory">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__BlogPosts__PostI__0C8AA257">
+          <End Type="Models.BlogPost" Role="BlogPost" Multiplicity="0..1" />
+          <End Type="Models.BlogPostsPostTag" Role="BlogPostsPostTag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BlogPost">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BlogPostsPostTag">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__BlogPosts__PostI__105B333B">
+          <End Type="Models.BlogPost" Role="BlogPost" Multiplicity="0..1" />
+          <End Type="Models.BlogPostsPostCategory" Role="BlogPostsPostCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BlogPost">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BlogPostsPostCategory">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__BlogPosts__TagId__5EBF139D">
+          <End Type="Models.BlogPostTag" Role="BlogPostTag" Multiplicity="0..1" />
+          <End Type="Models.BlogPostsPostTag" Role="BlogPostsPostTag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BlogPostTag">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BlogPostsPostTag">
+              <PropertyRef Name="TagId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="UserProfile">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="56" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Gender" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="ProfileImageUrl" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DateOfBirth" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="BlogPosts" Relationship="Models.FK__BlogPosts__Creat__08BA1173" FromRole="UserProfile" ToRole="BlogPost" />
+          <NavigationProperty Name="BlogPosts1" Relationship="Models.FK__BlogPosts__Updat__09AE35AC" FromRole="UserProfile" ToRole="BlogPost" />
+          <NavigationProperty Name="webpages_Roles" Relationship="Models.webpages_UsersInRoles" FromRole="UserProfile" ToRole="webpages_Roles" />
+        </EntityType>
+        <Association Name="FK__BlogPosts__Creat__08BA1173">
+          <End Type="Models.UserProfile" Role="UserProfile" Multiplicity="0..1" />
+          <End Type="Models.BlogPost" Role="BlogPost" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="BlogPost">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__BlogPosts__Updat__09AE35AC">
+          <End Type="Models.UserProfile" Role="UserProfile" Multiplicity="0..1" />
+          <End Type="Models.BlogPost" Role="BlogPost" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="BlogPost">
+              <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="webpages_UsersInRoles">
+          <End Type="Models.webpages_Roles" Role="webpages_Roles" Multiplicity="*" />
+          <End Type="Models.UserProfile" Role="UserProfile" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelsStoreContainer" CdmEntityContainer="Blog_Db_Entities" >
+          <EntitySetMapping Name="BlogPostCategories">
+            <EntityTypeMapping TypeName="Models.BlogPostCategory">
+              <MappingFragment StoreEntitySet="BlogPostCategory">
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BlogPosts">
+            <EntityTypeMapping TypeName="Models.BlogPost">
+              <MappingFragment StoreEntitySet="BlogPosts">
+                <ScalarProperty Name="PostFormat" ColumnName="PostFormat" />
+                <ScalarProperty Name="YoutubeVedioCodec" ColumnName="YoutubeVedioCodec" />
+                <ScalarProperty Name="ExcerptText" ColumnName="ExcerptText" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="BlogPostsImageUrl" ColumnName="BlogPostsImageUrl" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+                <ScalarProperty Name="IsPublished" ColumnName="IsPublished" />
+                <ScalarProperty Name="IsDrafted" ColumnName="IsDrafted" />
+                <ScalarProperty Name="PostContent" ColumnName="PostContent" />
+                <ScalarProperty Name="PostTitle" ColumnName="PostTitle" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BlogPostsPostCategories">
+            <EntityTypeMapping TypeName="Models.BlogPostsPostCategory">
+              <MappingFragment StoreEntitySet="BlogPostsPostCategory">
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BlogPostsPostTags">
+            <EntityTypeMapping TypeName="Models.BlogPostsPostTag">
+              <MappingFragment StoreEntitySet="BlogPostsPostTags">
+                <ScalarProperty Name="TagId" ColumnName="TagId" />
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BlogPostTags">
+            <EntityTypeMapping TypeName="Models.BlogPostTag">
+              <MappingFragment StoreEntitySet="BlogPostTag">
+                <ScalarProperty Name="TagName" ColumnName="TagName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="webpages_Membership">
+            <EntityTypeMapping TypeName="Models.webpages_Membership">
+              <MappingFragment StoreEntitySet="webpages_Membership">
+                <ScalarProperty Name="PasswordVerificationTokenExpirationDate" ColumnName="PasswordVerificationTokenExpirationDate" />
+                <ScalarProperty Name="PasswordVerificationToken" ColumnName="PasswordVerificationToken" />
+                <ScalarProperty Name="PasswordSalt" ColumnName="PasswordSalt" />
+                <ScalarProperty Name="PasswordChangedDate" ColumnName="PasswordChangedDate" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="PasswordFailuresSinceLastSuccess" ColumnName="PasswordFailuresSinceLastSuccess" />
+                <ScalarProperty Name="LastPasswordFailureDate" ColumnName="LastPasswordFailureDate" />
+                <ScalarProperty Name="IsConfirmed" ColumnName="IsConfirmed" />
+                <ScalarProperty Name="ConfirmationToken" ColumnName="ConfirmationToken" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="webpages_OAuthMembership">
+            <EntityTypeMapping TypeName="Models.webpages_OAuthMembership">
+              <MappingFragment StoreEntitySet="webpages_OAuthMembership">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ProviderUserId" ColumnName="ProviderUserId" />
+                <ScalarProperty Name="Provider" ColumnName="Provider" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="webpages_Roles">
+            <EntityTypeMapping TypeName="Models.webpages_Roles">
+              <MappingFragment StoreEntitySet="webpages_Roles">
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserProfiles">
+            <EntityTypeMapping TypeName="Models.UserProfile">
+              <MappingFragment StoreEntitySet="UserProfile">
+                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="ProfileImageUrl" ColumnName="ProfileImageUrl" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="webpages_UsersInRoles" TypeName="Models.webpages_UsersInRoles" StoreEntitySet="webpages_UsersInRoles">
+            <EndProperty Name="UserProfile">
+              <ScalarProperty Name="UserId" ColumnName="UserId" />
+            </EndProperty>
+            <EndProperty Name="webpages_Roles">
+              <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

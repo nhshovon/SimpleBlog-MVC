@@ -1,0 +1,50 @@
+﻿@using SimpleBlog.Models
+@{
+    Blog_Db_Entities entities = new Blog_Db_Entities();
+    var categoryList = entities.BlogPostCategories.OrderByDescending(x => x.Id).ToList();
+    var postList = entities.BlogPosts.OrderByDescending(x => x.Id).Where(x => x.IsApproved && x.IsPublished).ToList();
+
+}
+<div class="col-md-3">
+    <div class="section-container">
+        <h4 class="section-title"><span>Categories</span></h4>
+        <ul class="sidebar-list">
+            @foreach (var category in categoryList)
+            {
+                <li><a href="@Url.Action("Index","Home",new { filterBy ="category", filterTypeId = category.Id})">@category.CategoryName </a> </li>
+            }
+        </ul>
+    </div>
+
+    <div class="section-container">
+        <h4 class="section-title"><span>Archives</span></h4>
+        <ul class="sidebar-list">
+            @{
+                int countableMonth = 6;
+                var archiveStartDate = DateTime.Today;
+                while (countableMonth != 0)
+                {
+                    <li><a href="@Url.Action("Index","Home",new { filterBy ="archives", year = @archiveStartDate.Year, month = @archiveStartDate.Month })">@archiveStartDate.Date.ToString("MMMM yy")</a></li>
+                    countableMonth--;
+                    archiveStartDate = archiveStartDate.AddMonths(-1);
+                }
+
+            }
+        </ul>
+    </div>
+    <div class="section-container">
+        <h4 class="section-title"><span>Recent Post</span></h4>
+        <ul class="sidebar-recent-post">
+            @foreach (var post in postList)
+            {
+                <li>
+                    <div class="info">
+                        <h4 class="title"><a href="@Url.Action("Details", "Home", new {id = post.Id})" target="_blank">@post.PostTitle</a></h4>
+                        <div class="date">@post.CreatedDate.Value.ToString("dd MMMM yyyy")</div>
+                    </div>
+                </li>
+            }
+            
+        </ul>
+    </div>
+</div>

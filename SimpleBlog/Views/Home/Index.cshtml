@@ -1,0 +1,74 @@
+﻿@model PagedList.IPagedList<SimpleBlog.Models.BlogPost>
+@using PagedList.Mvc
+@{
+    Layout = "~/Views/Shared/_Layout_Public.cshtml";
+}
+
+
+<div class="col-md-9">
+    <ul class="post-list">
+        @foreach (var post in Model)
+        {
+            <!-- blog-grid -->
+
+            <li>
+                <!-- begin post-left-info -->
+                <div class="post-left-info">
+                    <div class="post-date">
+                        <span class="day">
+                            @if (post.CreatedDate != null)
+                            {
+                                @post.CreatedDate.Value.Day@:</span>
+                                @:<span class="month">@post.CreatedDate.Value.ToString("MMM")
+                            }
+                        </span>
+                    </div>
+                </div>
+                <!-- end post-left-info -->
+                <!-- begin post-content -->
+                <div class="post-content">
+                    <!-- begin post-image -->
+                    <div class="post-image">
+                        <a href="@Url.Action("Details", "Home", new {id = post.Id})"><img src="~/BlogImages/@post.BlogPostsImageUrl"></a>
+                    </div>
+                    <!-- end post-image -->
+                    <!-- begin post-info -->
+                    <div class="post-info">
+                        <h4 class="post-title">
+                            <a title="" href="@Url.Action("Details", "Home", new {id = post.Id})">@post.PostTitle</a>
+                        </h4>
+                        <div class="post-by">
+                            Posted By @post.UserProfile.webpages_Roles.FirstOrDefault().RoleName.ToLower()
+                        </div>
+                        <div class="post-desc">
+                            @post.ExcerptText
+                        </div>
+                    </div>
+                    <!-- end post-info -->
+                    <!-- begin read-btn-container -->
+                    <div class="read-btn-container">
+                        <a href="@Url.Action("Details", "Home", new {id = post.Id})" class="read-btn">Read More <i class="fa fa-angle-double-right"></i></a>
+                    </div>
+                    <!-- end read-btn-container -->
+                </div>
+                <!-- end post-content -->
+            </li>
+
+            <!-- blog-grid end -->
+        }
+    </ul>
+    <div class="section-container text-center">
+                @if (ViewBag.filterBy != null && ViewBag.filterTypeId != null)
+                {
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { filterBy = ViewBag.filterBy, filterTypeId = ViewBag.filterTypeId, page }))
+                }
+                else if (ViewBag.filterBy != null && ViewBag.year != null && ViewBag.month != null)
+                {
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { filterBy = ViewBag.filterBy, year = ViewBag.year, month = ViewBag.month, page }))
+                }
+                else
+                {
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+                }
+    </div>
+</div>

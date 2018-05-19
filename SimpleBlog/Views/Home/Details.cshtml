@@ -1,0 +1,43 @@
+﻿@using SimpleBlog.Models
+@model SimpleBlog.Models.BlogPost
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout_Public.cshtml";
+}
+
+<div class="col-md-9">
+    <div class="post-detail section-container">
+        <h4 class="post-title">
+            <a title="" href="#">@Model.PostTitle</a>
+        </h4>
+        <div class="post-by">
+            Posted By <a href="#">@Model.UserProfile.webpages_Roles.FirstOrDefault().RoleName.ToLower()</a> <span class="divider">|</span> @Model.CreatedDate?.ToString("dd-MMM-yyyy")
+        </div>
+        <!-- begin post-image -->
+        <div class="post-image">
+            <img src="~/BlogImages/@Model.BlogPostsImageUrl" alt="" />
+        </div>
+        <!-- end post-image -->
+        <!-- begin post-desc -->
+        <div class="post-desc">
+            @Html.Raw(HttpUtility.HtmlDecode(Model.PostContent))
+                        
+            @if (!string.IsNullOrWhiteSpace(Model.YoutubeVedioCodec))
+            {
+                <div class="col-md-12">
+                    Watch More in Video
+                    <br /><br />
+                    <iframe width="560"
+                            height="500"
+                            src='@string.Format("http://www.youtube.com/embed/{0}?rel=0",Model.YoutubeVedioCodec)'
+                            frameborder="0"
+                            allowfullscreen style="height: 500px !important;"></iframe>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="section-container">
+        <h4 class="section-title"><span>All Comments</span></h4>
+        @Html.Partial("_fb_comments_plugin_partial")
+    </div>
+</div>

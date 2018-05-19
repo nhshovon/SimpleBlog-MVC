@@ -1,0 +1,60 @@
+﻿@model SimpleBlog.Models.ViewModels.BlogPostTagVm
+
+@{
+    string successMsg = TempData["SuccessMsg"] as string;
+    string errorMsg = TempData["ErrorMsg"] as string;
+    if (!string.IsNullOrEmpty(successMsg))
+    {
+        <div class="alert alert-success fade in">
+            <strong>Success!</strong>
+            @successMsg
+            <span class="close" data-dismiss="alert">×</span>
+        </div>
+    }
+    if (!string.IsNullOrEmpty(errorMsg))
+    {
+        <div class="alert alert-danger fade in">
+            <strong>Error!</strong>
+            @Html.Raw(HttpUtility.HtmlDecode(errorMsg))
+            <span class="close" data-dismiss="alert">×</span>
+        </div>
+    }
+    int counter = 1;
+}
+
+@{
+    if (Model.BlogPostTagList.Any())
+    {
+        <table class="table table-bordered table-hover table-stripped table-striped">
+            <thead>
+                <tr>
+                    <td><b>#</b></td>
+                    <td><b>Tag Name</b></td>
+                    <td><b>Action</b></td>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var data in Model.BlogPostTagList)
+            {
+                <tr>
+                    <td>@(counter++)</td>
+                    <td>@data.TagName</td>
+                    <td>  @using (Ajax.BeginForm("delete", "tag", new { id = data.Id }, new AjaxOptions()
+                        {
+                            HttpMethod = "POST",
+                            InsertionMode = InsertionMode.Replace,
+                            LoadingElementId = "loadingImage",
+                            UpdateTargetId = "updatedArea"
+                        }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Remove</button>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+
+    }
+}

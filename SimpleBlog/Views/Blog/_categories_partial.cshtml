@@ -1,0 +1,41 @@
+﻿@model SimpleBlog.Models.ViewModels.BlogPostVm
+<div class="row" id="updateCategories">
+    <div class="col-md-12">
+        @{
+            string successMsg = TempData["SuccessMsg"] as string;
+            string errorMsg = TempData["ErrorMsg"] as string;
+            if (!string.IsNullOrEmpty(successMsg))
+            {
+                <div class="alert alert-success fade in">
+                    <strong>Success!</strong>
+                    @successMsg
+                    <span class="close" data-dismiss="alert">×</span>
+                </div>
+            }
+            if (!string.IsNullOrEmpty(errorMsg))
+            {
+                <div class="alert alert-danger fade in">
+                    <strong>Error!</strong>
+                    @Html.Raw(HttpUtility.HtmlDecode(errorMsg))
+                    <span class="close" data-dismiss="alert">×</span>
+                </div>
+            }
+        }
+        <div class="col-md-12" style="max-height: 150px; overflow-y: auto">
+            @for (int i = 0; i < Model.CategoryList.Count; i++)
+            {
+                <div class="checkbox">
+                    <label>
+                        @Html.HiddenFor(x => Model.CategoryList[i].CategoryName)
+                        @Html.HiddenFor(x => Model.CategoryList[i].Id)
+                        @Html.CheckBoxFor(x => Model.CategoryList[i].IsChecked, htmlAttributes: new {@class = "itemCheckBox"}) <span>@Model.CategoryList[i].CategoryName</span>
+                    </label>
+                </div>
+            }
+        </div>
+        <div class="col-md-12" style="margin-top: 10px !important;">
+            <a id="" href="@Url.Action("Index","BlogPostCategories")"><b>+ Add New Category</b></a>
+        </div>
+        
+    </div>
+</div>

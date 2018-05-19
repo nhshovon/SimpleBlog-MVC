@@ -1,0 +1,63 @@
+﻿@model SimpleBlog.Models.ViewModels.BlogPostTagVm
+    @{
+        ViewBag.Title = "Tag";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        
+        <h4 class="panel-title">Blog Tags</h4>
+    </div>
+    <div id="loadingImage" style="display: none" class="overlay">
+        <div style="height: 100%; width: 100%; padding-left: 45%; padding-top: 20%;">
+            <img src="/Content/Admin/assets/images/Init_loading.gif" height="100" width="100" alt="Loading, please wait" />
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            @using (Ajax.BeginForm("create", "tag", new AjaxOptions()
+            {
+                HttpMethod = "POST",
+                InsertionMode = InsertionMode.Replace,
+                LoadingElementId = "loadingImage",
+                UpdateTargetId = "updatedArea"
+            }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="col-md-12">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Tag Text</label>
+                            <div>
+                                @Html.TextBoxFor(x => x.TagText, new { @class = "form-control", @required = "required" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">&nbsp;</label>
+                            <div>
+                                <input type="submit" value="Create" class="btn btn-success" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="col-md-12">
+                <div id="updatedArea">
+                    @Html.Partial("_create_partial",Model)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+
+    <script type="text/javascript">
+        $(document)
+            .ready(function () {
+                $('#Tags').addClass("active");
+            });
+    </script>
+}
